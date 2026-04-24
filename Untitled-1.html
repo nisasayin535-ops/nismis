@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<WEBSİTE.html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BU DA BENİM TASARIMIM
+  </title>
+  <style>
+    :root{
+      --campus-purple: #7b2cbf;
+      --campus-pink: #f472b6;
+      --bg: linear-gradient(135deg, #6a0dad 0%, #f0a6d8 60%, #7c3aed 100%);
+      --text: #fff;
+      --card: rgba(255,255,255,0.85);
+      --shadow: 0 8px 20px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html, body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto;
+      color:#2b2b2b;
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* Üst bar: üyelik/Login */
+    .topbar{
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 66px;
+      display:flex;
+      align-items:center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      z-index: 50;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(2px);
+      border-bottom: 1px solid rgba(255,255,255,.15);
+    }
+    .brand{
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 800;
+      font-size: 28px;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,.25);
+      letter-spacing: 2px;
+      user-select:none;
+    }
+
+    /* Arka plan yıldızlar ve gelincikler için yer tutucu alan */
+    .scene{
+      position: relative;
+      padding-top: 90px; /* topbar boşluğu için */
+      min-height: 100vh;
+      overflow:hidden;
+    }
+    /* Kayan yıldızlar */
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .stars span{
+      position: absolute;
+      width: 2px; height: 2px;
+      background:white;
+      border-radius:50%;
+      top: -2px;
+      animation: drift 8s linear infinite;
+      opacity:.8;
+    }
+    @keyframes drift {
+      0% { transform: translateY(-10%); opacity:0.6; }
+      100% { transform: translateY(110%); opacity:0.0; }
+    }
+
+    /* Gelincikler (basit SVG/kısa resim olarak yerleştirme) */
+    .poppies {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      display:flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      height: 40vh;
+      pointer-events:none;
+      opacity:.95;
+    }
+    .poppies img{
+      width: 140px;
+      height: auto;
+      filter: drop-shadow(0 6px 6px rgba(0,0,0,.25));
+      animation: pop 6s ease-in-out infinite;
+    }
+    @keyframes pop {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Ana kartlar (gelinlikler) */
+    .gallery {
+      display:flex;
+      gap: 24px;
+      align-items: stretch;
+      justify-content: center;
+      padding: 40px 20px 60px;
+      flex-wrap: wrap;
+    }
+    .card {
+      width: 290px;
+      perspective: 1000px;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.6s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-inner {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s;
+    }
+    .gelinlik {
+      width: 100%;
+      height: 360px;
+      background: #fff;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      cursor: pointer;
+      transform: scale(1);
+    }
+    .gelinlik img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s;
+      transform: scale(1.05);
+    }
+    .gelinlik.open {
+      transform: rotateY(360deg);
+      /* 365 derece için zıplama etkisi yüklenir via CSS'de 360+ kalan dönüş gibi çalışır */
+    }
+    .gloss {
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.9), rgba(255,255,255,0) 40%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,.6), rgba(255,255,255,0) 40%);
+      mix-blend-mode: screen;
+      pointer-events:none;
+      animation: shimmer 6s linear infinite;
+      opacity:.5;
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
+
+    .model-name {
+      font-weight: 700;
+      font-size: 18px;
+      margin: 8px 0 4px;
+      text-align: left;
+    }
+    .price {
+      font-weight: 600;
+      color: #e11d48;
+    }
+
+    /* Butonlar ve modallar */
+    .login-btn {
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.5);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform .2s;
+    }
+    .login-btn:hover { transform: scale(1.05); }
+
+    /* Modal for login */
+    .modal {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.4);
+      z-index: 60;
+    }
+    .modal.active { display: flex; }
+    .modal-card {
+      width: 320px;
+      background: #fff;
+      color:#222;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.25);
+    }
+    .modal-card h3 { margin-top:0; }
+    .field { margin-bottom:12px; }
+    .field label { display:block; font-size:12px; color:#555; margin-bottom:6px; }
+    .field input {
+      width: 100%; padding: 10px; border-radius: 6px; border:1px solid #ddd;
+    }
+    .modal-actions { display:flex; justify-content: flex-end; gap:10px; margin-top:6px; }
+    .btn { padding: 10px 14px; border-radius:6px; border:0; cursor:pointer; }
+    .btn.primary { background:#7c3aed; color:#fff; }
+    .btn.secondary { background:#eee; color:#333; }
+
+    /* Responsive tweaks */
+    @media (max-width: 900px){
+      .gallery{ flex-direction:column; align-items:center; padding:20px; }
+      .card{ width: 90%; }
+      .gelinlik{ height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <button class="login-btn" id="openLogin">Üyelik Girişi</button>
+  </div>
+
+  <div class="brand">MİSS gelinlik</div>
+
+  <section class="scene" aria-label="Gelinlik koleksiyonu">
+    <!-- Yıldızlar (arka plan için basit oluşturulmuş) -->
+    <div class="stars" aria-label="Yıldız efekti">
+      <!-- 60 adet küçük yıldız -->
+      <script>
+        // Dinamik yıldızlar için hızlı bir eklemeci
+        (function addStars(){
+          const stars = document.querySelector('.stars');
+          for(let i=0;i<60;i++){
+            const s = document.createElement('span');
+            const size = Math.random()*2+1;
+            s.style.width = size+'px';
+            s.style.height = size+'px';
+            s.style.left = Math.random()*100 + '%';
+            s.style.animationDuration = (Math.random()*6 + 4) + 's';
+            s.style.top = Math.random()*100 + '%';
+            s.style.opacity = (Math.random()*0.6 + 0.4).toFixed(2);
+            stars.appendChild(s);
+          }
+        })();
+      </script>
+    </div>
+
+    <!-- Gelincikler (alt kısım) -->
+    <div class="poppies" aria-label="Gelin çiçekleri içerik">
+      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f338.svg" alt="Gelincik simgesi" />
+      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f337.svg" alt="Gül" />
+      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f33a.svg" alt="Güller" />
+    </div>
+  </section>
+
+  <!-- Galeri -->
+  <section class="gallery" aria-label="KOZMETİK">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="gelinlik" data-index="0" onclick="toggleGelinlik(this)">
+          <img src="https://images.unsplash.com/photo-1523387760570-34ed6b3a0a3f?q=80&w=1200&auto=format&fit=crop" alt="Gelinlik görsel 1" />
+          <div class="gloss"></div>
+        </div>
+        <div class="model-name">Gelinlik Model A</div>
+        <div class="price">₺ 9.950</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="gelinlik" data-index="1" onclick="toggleGelinlik(this)">
+          <img src="https://images.unsplash.com/photo-1528754681629-9f79a2b3f03c?q=80&w=1200&auto=format&fit=crop" alt="Gelinlik görsel 2" />
+          <div class="gloss"></div>
+        </div>
+        <div class="model-name">Gelinlik Model B</div>
+        <div class="price">₺ 12.500</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="gelinlik" data-index="2" onclick="toggleGelinlik(this)">
+          <img src="https://images.unsplash.com/photo-1521334884681-2b3a2b8f6b4a?q=80&w=1200&auto=format&fit=crop" alt="Gelinlik görsel 3" />
+          <div class="gloss"></div>
+        </div>
+        <div class="model-name">Gelinlik Model C</div>
+        <div class="price">₺ 8.750</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal" aria-hidden="true" aria-label="Üyelik Giriş">
+    <div class="modal-card" role="dialog">
+      <h3>Üye Giriş</h3>
+      <div class="field">
+        <label for="email">E-posta</label>
+        <input type="email" id="email" placeholder="e-posta@example.com" />
+      </div>
+      <div class="field">
+        <label for="password">Şifre</label>
+        <input type="password" id="password" placeholder="Şifreniz" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn secondary" id="closeLogin">İptal</button>
+        <button class="btn primary" id="loginSubmit">Giriş Yap</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Üyelik modal kontrolü
+    const loginBtn = document.getElementById('openLogin');
+    const modal = document.getElementById('loginModal');
+    const closeBtn = document.getElementById('closeLogin');
+    const submitBtn = document.getElementById('loginSubmit');
+    loginBtn.addEventListener('click', ()=> modal.classList.add('active'));
+    closeBtn.addEventListener('click', ()=> modal.classList.remove('active'));
+    modal.addEventListener('click', (e)=> {
+      if(e.target === modal) modal.classList.remove('active');
+    });
+    submitBtn.addEventListener('click', ()=> {
+      // Basit bir gösterim; gerçek senaryoda API çağrısı eklenebilir
+      alert('Giriş denemesi yapıldı (örnek).');
+      modal.classList.remove('active');
+    });
+
+    // Gelinliği açınca büyüt ve 365 derece dönüş efektleri
+    function toggleGelinlik(el){
+      const img = el.querySelector('img');
+      const parent = el;
+      // 365 derece dönüş için CSS dönüşünü tetiklemek adına sınıf ekleyelim
+      const card = el.closest('.card');
+      const inner = card.querySelector('.card-inner');
+      // Basit: aç/kapa
+      if(!el.classList.contains('open')){
+        el.classList.add('open');
+        // 365 derece dönüş simülasyonu: 360+ ekstra bir dönüş elde etmek için birkaç adım
+        inner.style.transform = 'rotateY(365deg)';
+        // Gelinlik içinde büyütme efekti
+        img.style.transform = 'scale(1.15)';
+      } else {
+        el.classList.remove('open');
+        inner.style.transform = 'rotateY(0deg)';
+        img.style.transform = 'scale(1)';
+      }
+    }
+
+    // Başlangıçta küçük artan efektler için yıldızlar yüklenmiş durumda
+  </script>
+</body>
+</html>
